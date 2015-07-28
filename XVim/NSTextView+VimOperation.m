@@ -1856,7 +1856,7 @@
     [self xvim_clearHighlightText];
     // Add yellow highlight
     for( NSTextCheckingResult* result in self.foundRanges){
-        [self.layoutManager addTemporaryAttribute:NSBackgroundColorAttributeName value:[NSColor yellowColor] forCharacterRange:result.range];
+        [self.layoutManager addTemporaryAttribute:NSBackgroundColorAttributeName value:[NSColor brownColor] forCharacterRange:result.range];
     }
     
     [self setNeedsUpdateFoundRanges:NO];
