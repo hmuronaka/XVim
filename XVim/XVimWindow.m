@@ -235,6 +235,7 @@
 
 - (void)handleKeyStroke:(XVimKeyStroke *)keyStroke onStack:(NSMutableArray *)evaluatorStack
 {
+    
     _currentEvaluatorStack = nil == evaluatorStack ? _defaultEvaluatorStack : evaluatorStack;
     
     if( _currentEvaluatorStack.count == 0 ){
@@ -246,6 +247,7 @@
 
     // Record the event
     XVim *xvim = [XVim instance];
+    TRACE_LOG(@"keyStroke=%@ str=%@", keyStroke, [keyStroke xvimString]);
     [xvim appendOperationKeyStroke:[keyStroke xvimString]];
 
     // Evaluate key stroke

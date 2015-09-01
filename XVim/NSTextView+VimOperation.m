@@ -2072,7 +2072,7 @@
 }
 
 - (void)_adjustCursorPosition{
-    TRACE_LOG(@"[%p]ENTER", self);
+    TRACE_LOG(@"[%p]ENTER insertionPoint = %d", self, self.insertionPoint);
     if( ![self.textStorage isValidCursorPosition:self.insertionPoint] ){
         NSRange placeholder = [(DVTSourceTextView*)self rangeOfPlaceholderFromCharacterIndex:self.insertionPoint forward:NO wrap:NO limit:0];
         if( placeholder.location != NSNotFound && self.insertionPoint == (placeholder.location + placeholder.length)){
@@ -2083,11 +2083,11 @@
             [self xvim_moveCursor:self.insertionPoint-1 preserveColumn:YES];
         }
     }
-    
+    TRACE_LOG(@"[%p]EXIT insertionPoint = %d", self, self.insertionPoint);
 }
 
 - (void)xvim_syncStateWithScroll:(BOOL)scroll{
-    DEBUG_LOG(@"[%p]IP:%d", self, self.insertionPoint);
+    DEBUG_LOG(@"BEGIN[%p]IP:%d", self, self.insertionPoint);
     self.xvim_lockSyncStateFromView = YES;
     // Reset current selection
     if( self.cursorMode == CURSOR_MODE_COMMAND ){
@@ -2106,6 +2106,7 @@
         [self xvim_scrollTo:self.insertionPoint];
     }
     self.xvim_lockSyncStateFromView = NO;
+    DEBUG_LOG(@"END[%p]IP:%d", self, self.insertionPoint);
     
     
 }
@@ -2243,9 +2244,11 @@
             end = [self.textStorage paragraphsBackward:begin count:motion.count option:motion.option];
             break;
         case MOTION_NEXT_CHARACTER:
+            TRACE_LOG(@"MOTION_NEXT_CHARACTER: begin=%d count=%d", begin, motion.count);
             end = [self.textStorage nextCharacterInLine:begin count:motion.count character:motion.character option:MOTION_OPTION_NONE];
             break;
         case MOTION_PREV_CHARACTER:
+            TRACE_LOG(@"MOTION_PREV_CHARACTER: begin=%d count=%d", begin, motion.count);
             end = [self.textStorage prevCharacterInLine:begin count:motion.count character:motion.character option:MOTION_OPTION_NONE];
             break;
         case MOTION_TILL_NEXT_CHARACTER:
@@ -2379,7 +2382,8 @@
             end = range.location + range.length - 1;
         }
     }
-    XVimRange r = XVimMakeRange(begin, end);
+//    XVimRange r = XVimMakeRange(begin, end);
+    XVimRange r = XVimMakeRange(begin, end );
     TRACE_LOG(@"range location:%u  length:%u", r.begin, r.end - r.begin + 1);
     return r;
 }

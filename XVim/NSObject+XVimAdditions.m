@@ -44,7 +44,7 @@
     Method origMethod = class_getInstanceMethod(self, origSel);
     Method newMethod  = class_getInstanceMethod(self, newSel);
 
-    NSAssert(newMethod,  @"-[%@ %@] doesn't exist", NSStringFromClass(self), NSStringFromSelector(newSel));
+    NSAssert(newMethod,  @"@@@ -[%@ %@] doesn't exist", NSStringFromClass(self), NSStringFromSelector(newSel));
 
     if (class_addMethod(self, origSel, method_getImplementation(newMethod), method_getTypeEncoding(newMethod))) {
         class_replaceMethod(self, origSel, method_getImplementation(newMethod), method_getTypeEncoding(newMethod));

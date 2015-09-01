@@ -50,6 +50,9 @@
     [self xvim_swizzleInstanceMethod:@selector(viewDidMoveToSuperview) with:@selector(xvim_viewDidMoveToSuperview)];
     [self xvim_swizzleInstanceMethod:@selector(observeValueForKeyPath:ofObject:change:context:) with:@selector(xvim_observeValueForKeyPath:ofObject:change:context:)];
     [self xvim_swizzleInstanceMethod:@selector(shouldAutoCompleteAtLocation:) with:@selector(xvim_shouldAutoCompleteAtLocation:)];
+    
+    
+    
 }
 
 + (void)xvim_finalize{
@@ -258,13 +261,20 @@ NSRect s_lastCaret;
 static NSString* XVIM_INSTALLED_OBSERVERS_DVTSOURCETEXTVIEW = @"XVIM_INSTALLED_OBSERVERS_DVTSOURCETEXTVIEW";
 
 - (void)xvim_viewDidMoveToSuperview {
+    if( self.delegate ) {
+        TRACE_LOG(@"@@@ self.delegate already exists");
+    } else {
+        TRACE_LOG(@"@@@ self.delegate is nil.");
+//        self.delegate = self;
+    }
     @try{
         if ( ![ self boolForName:XVIM_INSTALLED_OBSERVERS_DVTSOURCETEXTVIEW ] ) {
             [XVim.instance.options addObserver:self forKeyPath:@"hlsearch" options:NSKeyValueObservingOptionInitial|NSKeyValueObservingOptionNew context:nil];
             [XVim.instance.options addObserver:self forKeyPath:@"ignorecase" options:NSKeyValueObservingOptionInitial|NSKeyValueObservingOptionNew context:nil];
             [XVim.instance.searcher addObserver:self forKeyPath:@"lastSearchString" options:NSKeyValueObservingOptionInitial|NSKeyValueObservingOptionNew context:nil];
             [XVim.instance.options addObserver:self forKeyPath:@"highlight" options:NSKeyValueObservingOptionInitial|NSKeyValueObservingOptionNew context:nil];
-            [ self xvim_performOnDealloc:^{
+            [self addObserver:self forKeyPath:@"delegate" options:NSKeyValueObservingOptionInitial|NSKeyValueObservingOptionNew context:nil];
+             [ self xvim_performOnDealloc:^{
                 @try{
                     [XVim.instance.options removeObserver:self forKeyPath:@"hlsearch"];
                     [XVim.instance.options removeObserver:self forKeyPath:@"ignorecase"];
@@ -295,6 +305,10 @@ static NSString* XVIM_INSTALLED_OBSERVERS_DVTSOURCETEXTVIEW = @"XVIM_INSTALLED_O
         [self setNeedsUpdateFoundRanges:YES];
         [self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:YES];
     }
+    
+    if([keyPath isEqualToString:@"delegate"] ) {
+        TRACE_LOG(@"@@@ delegate was changed");
+    }
 }
 
 #pragma mark XVim Category Methods
@@ -305,6 +319,13 @@ static NSString* XVIM_INSTALLED_OBSERVERS_DVTSOURCETEXTVIEW = @"XVIM_INSTALLED_O
 
 - (XVimWindow*)xvim_window{
     return [[self xvim_editorArea] xvim_window];
+}
+
+#pragma mark delegate
+-(NSArray*)textView:(NSTextView *)textView completions:(NSArray *)words forPartialWordRange:(NSRange)charRange indexOfSelectedItem:(NSInteger *)index {
+    TRACE_LOG(@"@@@ idx=%d, words=%@", index, words);
+    
+    return words;
 }
 
 @end

@@ -486,6 +486,7 @@
 }
 
 - (XVimEvaluator*)DOT{
+    
     [[XVim instance] startRepeat];
     XVimString *repeatRegister = [[XVim instance] lastOperationCommands];
     TRACE_LOG(@"Repeat:%@", repeatRegister);
