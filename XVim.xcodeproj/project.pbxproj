@@ -98,6 +98,8 @@
 		A2F2621C182CEC3600AD3DC4 /* DVTSourceTextScrollView+XVim.m in Sources */ = {isa = PBXBuildFile; fileRef = A2F2621A182CEC3600AD3DC4 /* DVTSourceTextScrollView+XVim.m */; };
 		D605FA581B9480E400721333 /* DVTCodeLibraryDetailController+XVim.m in Sources */ = {isa = PBXBuildFile; fileRef = D605FA571B9480E400721333 /* DVTCodeLibraryDetailController+XVim.m */; };
 		D65D3A2F1B92EB2800E67E3E /* NSColor+Extra.m in Sources */ = {isa = PBXBuildFile; fileRef = D65D3A2E1B92EB2800E67E3E /* NSColor+Extra.m */; };
+		D6DCE0BA1B96AE8F00DAC38B /* HMStopWatch.m in Sources */ = {isa = PBXBuildFile; fileRef = D6DCE0B71B96AE8F00DAC38B /* HMStopWatch.m */; };
+		D6DCE0BB1B96AE8F00DAC38B /* HMStopWatchHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = D6DCE0B91B96AE8F00DAC38B /* HMStopWatchHelper.m */; };
 		E905EE3B18B0461E0052D3C1 /* DVTTextSidebarView+XVim.m in Sources */ = {isa = PBXBuildFile; fileRef = E905EE3818B045FE0052D3C1 /* DVTTextSidebarView+XVim.m */; };
 		ED37857D1A96F099003BE404 /* XVimReplacePromptEvaluator.m in Sources */ = {isa = PBXBuildFile; fileRef = ED37857C1A96F099003BE404 /* XVimReplacePromptEvaluator.m */; };
 /* End PBXBuildFile section */
@@ -296,6 +298,10 @@
 		D605FA571B9480E400721333 /* DVTCodeLibraryDetailController+XVim.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "DVTCodeLibraryDetailController+XVim.m"; path = "XVim/DVTCodeLibraryDetailController+XVim.m"; sourceTree = SOURCE_ROOT; };
 		D65D3A2D1B92EB2800E67E3E /* NSColor+Extra.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSColor+Extra.h"; path = "XVim/NSColor+Extra.h"; sourceTree = "<group>"; };
 		D65D3A2E1B92EB2800E67E3E /* NSColor+Extra.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSColor+Extra.m"; path = "XVim/NSColor+Extra.m"; sourceTree = "<group>"; };
+		D6DCE0B61B96AE8F00DAC38B /* HMStopWatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HMStopWatch.h; path = XVim/HMStopWatch.h; sourceTree = "<group>"; };
+		D6DCE0B71B96AE8F00DAC38B /* HMStopWatch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HMStopWatch.m; path = XVim/HMStopWatch.m; sourceTree = "<group>"; };
+		D6DCE0B81B96AE8F00DAC38B /* HMStopWatchHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HMStopWatchHelper.h; path = XVim/HMStopWatchHelper.h; sourceTree = "<group>"; };
+		D6DCE0B91B96AE8F00DAC38B /* HMStopWatchHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HMStopWatchHelper.m; path = XVim/HMStopWatchHelper.m; sourceTree = "<group>"; };
 		E905EE3718B045FE0052D3C1 /* DVTTextSidebarView+XVim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "DVTTextSidebarView+XVim.h"; path = "XVim/DVTTextSidebarView+XVim.h"; sourceTree = SOURCE_ROOT; };
 		E905EE3818B045FE0052D3C1 /* DVTTextSidebarView+XVim.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "DVTTextSidebarView+XVim.m"; path = "XVim/DVTTextSidebarView+XVim.m"; sourceTree = SOURCE_ROOT; };
 		ED37857B1A96F099003BE404 /* XVimReplacePromptEvaluator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XVimReplacePromptEvaluator.h; path = XVim/XVimReplacePromptEvaluator.h; sourceTree = SOURCE_ROOT; };
@@ -529,6 +535,10 @@
 		A2F41B0F14D70BD000A0314F /* Debug */ = {
 			isa = PBXGroup;
 			children = (
+				D6DCE0B61B96AE8F00DAC38B /* HMStopWatch.h */,
+				D6DCE0B71B96AE8F00DAC38B /* HMStopWatch.m */,
+				D6DCE0B81B96AE8F00DAC38B /* HMStopWatchHelper.h */,
+				D6DCE0B91B96AE8F00DAC38B /* HMStopWatchHelper.m */,
 				A24782B214D6F56E003B6433 /* Logger.h */,
 				A24782B314D6F56E003B6433 /* Logger.m */,
 			);
@@ -799,6 +809,7 @@
 				A28F423F17EEDBC200A3F7AE /* XVimKeymap.m in Sources */,
 				A28F424017EEDBC200A3F7AE /* XVimExCommand.m in Sources */,
 				A28F424117EEDBC200A3F7AE /* XVimSearch.m in Sources */,
+				D6DCE0BA1B96AE8F00DAC38B /* HMStopWatch.m in Sources */,
 				A28F424217EEDBC200A3F7AE /* XVimOptions.m in Sources */,
 				A2752F5819F3E04F00D1642C /* ProcessRunner.m in Sources */,
 				A28F424317EEDBC200A3F7AE /* XVimTildeEvaluator.m in Sources */,
@@ -851,6 +862,7 @@
 				A28F426D17EEDBC200A3F7AE /* NSTextView+VimOperation.m in Sources */,
 				A28F426E17EEDBC200A3F7AE /* XVimTester+ExCmd.m in Sources */,
 				A28F426F17EEDBC200A3F7AE /* XVimTester+Search.m in Sources */,
+				D6DCE0BB1B96AE8F00DAC38B /* HMStopWatchHelper.m in Sources */,
 				A28F427017EEDBC200A3F7AE /* XVimJoinEvaluator.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

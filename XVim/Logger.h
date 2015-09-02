@@ -11,6 +11,7 @@
 
 #if defined DEBUG && !defined LOGGER_DISABLE_DEBUG  && !defined LOGGER_DISABLE_ALL
 #define TRACE_LOG(fmt,...) [Logger logWithLevel:LogTrace format:@"%50s%5d: " fmt, __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__];
+#define TIME_LOG(block,fmt,...) [Logger timeWithBlock:block format:@"%50s%5d: " fmt, __PRETTY_FUNCTION__, __LINE__, ##__VAR_ARGS__];
 #define DEBUG_LOG(fmt,...) [Logger logWithLevel:LogDebug format:@"%50s%5d: " fmt, __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__];
 #else
 #define TRACE_LOG(fmt,...)
@@ -41,6 +42,8 @@ typedef enum LogLevel_t{
 + (void) logWithLevel:(LogLevel)level format:(NSString*)format, ...;
 + (void) registerTracing:(NSString*)name;
 + (Logger*) defaultLogger;
++ (Logger*) stopWatchLogger;
++ (void) logTimeWithBlock:(void (^)())block fmt:(NSString*)fmt, ...;
 
 - (id) initWithName:(NSString*)name; // "Root.MyPackage.MyComponent"
 - (id) initWithName:(NSString *)n level:(LogLevel)l;

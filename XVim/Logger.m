@@ -9,10 +9,13 @@
 #import "Logger.h"
 #import <objc/runtime.h>
 #import <Foundation/Foundation.h>
+#import "HMStopWatch.h"
 
 #define LOGGER_DEFAULT_NAME @"LoggerDefaultName"
+#define LOGGER_STOPWATCH_NAME @"LoggerStopwatch"
 
 static Logger* s_defaultLogger = nil;
+static Logger* s_stopwatchLogger = nil;
 
 
 @interface Logger(){
@@ -33,6 +36,17 @@ static Logger* s_defaultLogger = nil;
 #endif
     }
     return s_defaultLogger;
+}
+
++ (Logger*) stopWatchLogger{
+    if( s_stopwatchLogger == nil ){
+#ifdef DEBUG
+        s_stopwatchLogger = [[Logger alloc] initWithName:LOGGER_STOPWATCH_NAME];
+#else
+        s_stopwatchLogger = [[Logger alloc] initWithName:LOGGER_STOPWATCH_NAME level:LogError];
+#endif
+    }
+    return s_stopwatchLogger;
 }
 
 - (void) forwardInvocationForLogger:(NSInvocation*) invocation{
@@ -74,6 +88,23 @@ static Logger* s_defaultLogger = nil;
     class_addMethod(c, @selector(forwardInvocation:), class_getMethodImplementation([Logger class], @selector(forwardInvocationForLogger:)), method_getTypeEncoding(myinv));
 }
 
++ (void) logTimeWithBlock:(void (^)())block fmt:(NSString*)fmt, ...{
+    HMStopWatch* stopwatch = [HMStopWatch new];
+    
+    [stopwatch start];
+    if( block ) {
+        block();
+    }
+    [stopwatch stop];
+    
+    fmt = [fmt stringByAppendingFormat:@":%f ", stopwatch.time];
+    
+    Logger* logger = [self stopWatchLogger];
+    va_list argumentList;
+    va_start(argumentList, fmt);
+    [logger logWithLevel:LogTrace format:fmt :argumentList];
+    va_end(argumentList);  
+}
 
 - (id)init {
     return [self initWithName:LOGGER_DEFAULT_NAME];
