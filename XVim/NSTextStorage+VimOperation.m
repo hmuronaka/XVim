@@ -11,6 +11,7 @@
 #import "NSTextStorage+VimOperation.h"
 #import "Logger.h"
 #import "NSTextView+VimOperation.h"
+#import "NSString+TextObject.h"
 
 @implementation NSTextStorage (VimOperation)
 
@@ -2057,6 +2058,12 @@ NSInteger xv_findChar(NSString *string, NSInteger index, int repeatCount, char c
     XVimMotion* m = XVIM_MAKE_MOTION(MOTION_POSITION,DEFAULT_MOTION_TYPE , MOTION_OPTION_NONE, 1);
     m.position = num.unsignedIntegerValue;
     [view xvim_move:m];
+}
+
+-(NSRange)currentCamelCaseWord:(NSUInteger)index count:(NSUInteger)count option:(MOTION_OPTION)opt {
+    
+    return [[self xvim_string] rangeOfCamelcaseSurrundingCharacterWithFromIndex:(NSInteger)index];
+    
 }
 
 @end
