@@ -6,10 +6,7 @@
 //  Copyright (c) 2015年 Muronaka Hiroaki. All rights reserved.
 //
 
-#import "Logger.h"
 #import "NSString+TextObject.h"
-
-#define HM_TextObject_Swap(a,b) { a ^= b; b ^= a; a ^= b; }
 
 @implementation NSString (HM_TextObject)
 
@@ -24,8 +21,8 @@
     if( beginIndex == index ) {
         endIndex = [self hm_searchCharacter:character ignoreCharacters:@"" fromIndex:index + 1];
         if( endIndex == NSNotFound ) {
-            endIndex = [self hm_searchReverselyWithCharacter:character ignoreCharacters:@"" fromIndex:index - 1];
-            HM_TextObject_Swap(beginIndex, endIndex);
+            endIndex = beginIndex;
+            beginIndex = [self hm_searchReverselyWithCharacter:character ignoreCharacters:@"" fromIndex:index - 1];
         }
     } else {
         endIndex = [self hm_searchCharacter:character ignoreCharacters:@"" fromIndex:index];
@@ -75,7 +72,6 @@
             result = currentIndex;
             break;
         } else if( [ignoreCharacterSet characterIsMember:currentCh] ) {
-            result = NSNotFound;
             break;
         }
         ++currentIndex;
@@ -94,13 +90,12 @@
     
     NSUInteger currentIndex = MIN(self.length - 1, fromIndex);
     NSUInteger result = NSNotFound;
-    while( currentIndex > (NSUInteger)-1 ) {
+    while( currentIndex != (NSUInteger)-1 ) {
         unichar currentCh = [self characterAtIndex:currentIndex];
         if( currentCh == character ) {
             result = currentIndex;
             break;
         } else if( [ignoreCharacterSet characterIsMember:currentCh] ) {
-            result = NSNotFound;
             break;
         }
         --currentIndex;

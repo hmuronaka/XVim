@@ -2061,9 +2061,20 @@ NSInteger xv_findChar(NSString *string, NSInteger index, int repeatCount, char c
 }
 
 -(NSRange)currentCamelCaseWord:(NSUInteger)index count:(NSUInteger)count option:(MOTION_OPTION)opt {
+    NSString* string= [self xvim_string];
     
-    return [[self xvim_string] rangeOfCamelcaseSurrundingCharacterWithFromIndex:(NSInteger)index];
+    NSRange range;
+    if( opt & TEXTOBJECT_INNER) {
+        range = [string rangeOfNotIncludesSurrundingCharacter:'_' fromIndex:index];
+    } else {
+        range = [string rangeOfIncludesSurrundingCharacter:'_' fromIndex:index];
+    }
     
+    if( range.length == 0 ) {
+        range = [string rangeOfCamelcaseSurrundingCharacterWithFromIndex:index];
+    }
+    
+    return range;
 }
 
 @end
