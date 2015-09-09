@@ -2071,10 +2071,79 @@ NSInteger xv_findChar(NSString *string, NSInteger index, int repeatCount, char c
     }
     
     if( range.length == 0 ) {
-        range = [string rangeOfCamelcaseSurrundingCharacterWithFromIndex:index count:count];
+        range = [self rangeOfCamelcaseSurrundingCharacterWithFromIndex:(NSInteger)index];
     }
     
     return range;
+}
+
+-(unichar)safetyCharacterAtIndex:(NSUInteger)index fromString:(NSString*)str {
+    if( index >= str.length ) {
+        return 0;
+    } else {
+        return [str characterAtIndex:index];
+    }
+}
+
+-(NSRange)rangeOfCamelcaseSurrundingCharacterWithFromIndex:(NSInteger)index {
+    NSString* string = [self xvim_string];
+    
+    if( (NSUInteger)index >= self.length )  {
+        return NSMakeRange(NSNotFound, 0);
+    }
+    
+    unichar currentCh = [string characterAtIndex:(NSUInteger)index];
+    
+    NSCharacterSet* upperCharSet = [NSCharacterSet uppercaseLetterCharacterSet];
+    NSCharacterSet* lowerCharSet = [NSCharacterSet lowercaseLetterCharacterSet];
+    
+    NSInteger beginPos = -1;
+    NSInteger endPos = -1;
+    
+    if( [upperCharSet characterIsMember:currentCh] ) {
+        unichar nextCh = [self safetyCharacterAtIndex:(NSUInteger)index + 1 fromString:string];
+        // Pdf -> get Pdf
+        if( [lowerCharSet characterIsMember:nextCh] ) {
+            beginPos = index;
+            endPos = seek_forwards(string, index, [lowerCharSet invertedSet]);
+        // PDFView -> current pos is in 'PDF'. get PDF
+        } else if( [upperCharSet characterIsMember:nextCh] ) {
+            beginPos = seek_backwards(string, index, [upperCharSet invertedSet]);
+            endPos = seek_forwards(string, index + 1, [upperCharSet invertedSet]);
+            
+            nextCh = [self safetyCharacterAtIndex:(NSUInteger)endPos + 1 fromString:string];
+            if( [lowerCharSet characterIsMember:nextCh] ) {
+                --endPos;
+            }
+            // MyPDF -> current pos is in 'F' get PDF
+        } else {
+            endPos = index;
+            beginPos = seek_backwards(string, endPos - 1, [upperCharSet invertedSet]);
+        }
+    } else if([lowerCharSet characterIsMember:currentCh]) {
+        unichar nextCh = [self safetyCharacterAtIndex:(NSUInteger)index + 1 fromString:string];
+        
+        if( [lowerCharSet characterIsMember:nextCh] ) {
+            beginPos = seek_backwards(string, index, [lowerCharSet invertedSet]);
+            endPos = seek_forwards(string, index + 1, [lowerCharSet invertedSet]);
+        } else {
+            endPos = index;
+            beginPos = seek_backwards(string, index - 1, [lowerCharSet invertedSet]);
+            if( beginPos == NSNotFound ) {
+                beginPos = endPos;
+            }
+        }
+        
+        unichar prevCh = [self safetyCharacterAtIndex:(NSUInteger)beginPos - 1 fromString:string];
+        if( [upperCharSet characterIsMember:prevCh] ) {
+            --beginPos;
+        }
+    }
+    
+    if( beginPos == index && endPos == index ) {
+        return NSMakeRange(NSNotFound, 0);
+    }
+    return NSMakeRange((NSUInteger)beginPos, (NSUInteger)(endPos - beginPos + 1));
 }
 
 @end
