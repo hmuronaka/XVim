@@ -2071,7 +2071,7 @@ NSInteger xv_findChar(NSString *string, NSInteger index, int repeatCount, char c
     }
     
     if( range.length == 0 ) {
-        range = [string rangeOfCamelcaseSurrundingCharacterWithFromIndex:index];
+        range = [string rangeOfCamelcaseSurrundingCharacterWithFromIndex:index count:count];
     }
     
     return range;

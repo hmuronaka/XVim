@@ -2415,7 +2415,7 @@
             range = [self.textStorage currentWord:begin count:motion.count  option:motion.option];
             break;
         case TEXTOBJECT_UNDERSCORE:
-            range = [self.textStorage currentCamelCaseWord:begin count:0 option:motion.option];
+            range = [self.textStorage currentCamelCaseWord:begin count:motion.count option:motion.option];
             break;
         case TEXTOBJECT_BRACES:
             range = xv_current_block([self xvim_string], current, motion.count, !(motion.option & TEXTOBJECT_INNER), '{', '}');

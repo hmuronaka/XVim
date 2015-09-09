@@ -13,5 +13,6 @@
 -(NSRange)rangeOfIncludesSurrundingCharacter:(unichar)character fromIndex:(NSUInteger)index;
 -(NSRange)rangeOfNotIncludesSurrundingCharacter:(unichar)character fromIndex:(NSUInteger)index;
 -(NSRange)rangeOfCamelcaseSurrundingCharacterWithFromIndex:(NSUInteger)index;
+-(NSRange)rangeOfCamelcaseSurrundingCharacterWithFromIndex:(NSUInteger)index count:(NSUInteger)count;
 
 @end
