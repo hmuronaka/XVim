@@ -2071,7 +2071,7 @@ NSInteger xv_findChar(NSString *string, NSInteger index, int repeatCount, char c
     }
     
     if( range.length == 0 ) {
-        range = [self rangeOfCamelcaseSurrundingCharacterWithFromIndex:(NSInteger)index];
+        range = [self rangeOfCamelcaseSurrundingCharacterWithFromIndex:(NSInteger)index count:count];
     }
     
     return range;
@@ -2083,6 +2083,29 @@ NSInteger xv_findChar(NSString *string, NSInteger index, int repeatCount, char c
     } else {
         return [str characterAtIndex:index];
     }
+}
+
+-(NSRange)rangeOfCamelcaseSurrundingCharacterWithFromIndex:(NSInteger)index count:(NSUInteger)count {
+    
+    NSRange range = NSMakeRange(NSNotFound, 0);
+    NSInteger currentIndex = index;
+    
+    while( count > 0 ) {
+        if( range.location != NSNotFound ) {
+            currentIndex = (NSInteger)range.location + (NSInteger)range.length;
+        }
+        NSRange tempRange = [self rangeOfCamelcaseSurrundingCharacterWithFromIndex:currentIndex];
+        if( tempRange.location == NSNotFound ) {
+            break;
+        } else {
+            if( range.location == NSNotFound ) {
+                range.location = tempRange.location;
+            }
+            range.length += tempRange.length;
+        }
+        --count;
+    }
+    return range;
 }
 
 -(NSRange)rangeOfCamelcaseSurrundingCharacterWithFromIndex:(NSInteger)index {
@@ -2097,38 +2120,47 @@ NSInteger xv_findChar(NSString *string, NSInteger index, int repeatCount, char c
     NSCharacterSet* upperCharSet = [NSCharacterSet uppercaseLetterCharacterSet];
     NSCharacterSet* lowerCharSet = [NSCharacterSet lowercaseLetterCharacterSet];
     
-    NSInteger beginPos = -1;
-    NSInteger endPos = -1;
+    NSInteger beginPos = index;
+    NSInteger endPos = index;
     
     if( [upperCharSet characterIsMember:currentCh] ) {
         unichar nextCh = [self safetyCharacterAtIndex:(NSUInteger)index + 1 fromString:string];
-        // Pdf -> get Pdf
+        
+        // example: MyPDFViewer. current 'V' => Viewer
         if( [lowerCharSet characterIsMember:nextCh] ) {
             beginPos = index;
-            endPos = seek_forwards(string, index, [lowerCharSet invertedSet]);
-        // PDFView -> current pos is in 'PDF'. get PDF
+            endPos = seek_forwards(string, index + 1, lowerCharSet);
+            endPos = (endPos == index ? index : endPos - 1);
+            
+        // example: MyPDFViewer. current 'D' or 'F' => PDF
         } else if( [upperCharSet characterIsMember:nextCh] ) {
-            beginPos = seek_backwards(string, index, [upperCharSet invertedSet]);
-            endPos = seek_forwards(string, index + 1, [upperCharSet invertedSet]);
+            beginPos = seek_backwards(string, index + 1, upperCharSet);
+            endPos = seek_forwards(string, index + 1, upperCharSet);
+            endPos = (endPos == index ? index : endPos - 1);
             
             nextCh = [self safetyCharacterAtIndex:(NSUInteger)endPos + 1 fromString:string];
+            
             if( [lowerCharSet characterIsMember:nextCh] ) {
                 --endPos;
             }
-            // MyPDF -> current pos is in 'F' get PDF
+        // example: MyPDF_. current 'F' => PDF
         } else {
             endPos = index;
-            beginPos = seek_backwards(string, endPos - 1, [upperCharSet invertedSet]);
+            beginPos = seek_backwards(string, endPos, upperCharSet);
         }
+    
     } else if([lowerCharSet characterIsMember:currentCh]) {
         unichar nextCh = [self safetyCharacterAtIndex:(NSUInteger)index + 1 fromString:string];
         
+        // example: MyPDFViewer. current 'i' or 'e' => Viewer
         if( [lowerCharSet characterIsMember:nextCh] ) {
-            beginPos = seek_backwards(string, index, [lowerCharSet invertedSet]);
-            endPos = seek_forwards(string, index + 1, [lowerCharSet invertedSet]);
+            beginPos = seek_backwards(string, index + 1, lowerCharSet);
+            endPos = seek_forwards(string, index + 1, lowerCharSet);
+            endPos = (endPos == index ? index : endPos - 1);
+        // example: MyPDFViewer. current 'r' => Viewer
         } else {
             endPos = index;
-            beginPos = seek_backwards(string, index - 1, [lowerCharSet invertedSet]);
+            beginPos = seek_backwards(string, index, lowerCharSet);
             if( beginPos == NSNotFound ) {
                 beginPos = endPos;
             }
