@@ -145,6 +145,29 @@
     
 }
 
+-(NSRange)rangeOfCamelcaseSurrundingCharacterWithFromIndex:(NSUInteger)index count:(NSUInteger)count {
+    
+    NSRange range = NSMakeRange(NSNotFound, 0);
+    NSUInteger currentIndex = index;
+    
+    while( count > 0 ) {
+        if( range.location != NSNotFound ) {
+            currentIndex = range.location + range.length;
+        }
+        NSRange tempRange = [self rangeOfCamelcaseSurrundingCharacterWithFromIndex:currentIndex];
+        if( tempRange.location == NSNotFound ) {
+            break;
+        } else {
+            if( range.location == NSNotFound ) {
+                range.location = tempRange.location;
+            }
+            range.length += tempRange.length;
+        }
+        --count;
+    }
+    return range;
+}
+
 
 -(NSRange)rangeOfCamelcaseSurrundingCharacterWithFromIndex:(NSUInteger)index {
     
