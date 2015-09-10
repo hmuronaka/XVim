@@ -2119,7 +2119,7 @@ NSInteger xv_findChar(NSString *string, NSInteger index, int repeatCount, char c
     
     NSCharacterSet* upperCharSet = [NSCharacterSet uppercaseLetterCharacterSet];
     NSCharacterSet* lowerCharSet = [NSCharacterSet lowercaseLetterCharacterSet];
-    NSCharacterSet* numberCharSet = [NSCharacterSet characterSetWithCharactersInString:@"0123456789"];
+    NSCharacterSet* numberCharSet = [NSCharacterSet decimalDigitCharacterSet];
     
     NSInteger beginPos = index;
     NSInteger endPos = index;
@@ -2171,13 +2171,28 @@ NSInteger xv_findChar(NSString *string, NSInteger index, int repeatCount, char c
         if( [upperCharSet characterIsMember:prevCh] ) {
             --beginPos;
         }
-    } else if([numberCharSet characterIsMember:currentCh]) {
+    } else {
         
-        beginPos = seek_backwards(string, index + 1, numberCharSet);
-        endPos = seek_forwards(string, index + 1, numberCharSet);
+        NSMutableCharacterSet* tempCharSet = [NSMutableCharacterSet whitespaceAndNewlineCharacterSet];
+        [tempCharSet formUnionWithCharacterSet:upperCharSet];
+        [tempCharSet formUnionWithCharacterSet:lowerCharSet];
+        [tempCharSet formUnionWithCharacterSet:numberCharSet];
         
-        return NSMakeRange((NSUInteger)beginPos, (NSUInteger)(endPos - beginPos));
-        
+        NSArray* otherCharSets = @[numberCharSet, [tempCharSet invertedSet]];
+        __block NSRange result = NSMakeRange(NSNotFound, 0);
+        [otherCharSets enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            
+            NSCharacterSet* charSet = obj;
+            if([charSet characterIsMember:currentCh]) {
+            
+                NSInteger beginPos = seek_backwards(string, index + 1, charSet);
+                NSInteger endPos = seek_forwards(string, index + 1, charSet);
+                
+                result = NSMakeRange((NSUInteger)beginPos, (NSUInteger)(endPos - beginPos));
+                *stop = YES;
+            }
+        }];
+        return result;
     }
     
     if( beginPos == index && endPos == index ) {
