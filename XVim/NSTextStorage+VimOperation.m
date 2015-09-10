@@ -2119,6 +2119,7 @@ NSInteger xv_findChar(NSString *string, NSInteger index, int repeatCount, char c
     
     NSCharacterSet* upperCharSet = [NSCharacterSet uppercaseLetterCharacterSet];
     NSCharacterSet* lowerCharSet = [NSCharacterSet lowercaseLetterCharacterSet];
+    NSCharacterSet* numberCharSet = [NSCharacterSet characterSetWithCharactersInString:@"0123456789"];
     
     NSInteger beginPos = index;
     NSInteger endPos = index;
@@ -2170,6 +2171,13 @@ NSInteger xv_findChar(NSString *string, NSInteger index, int repeatCount, char c
         if( [upperCharSet characterIsMember:prevCh] ) {
             --beginPos;
         }
+    } else if([numberCharSet characterIsMember:currentCh]) {
+        
+        beginPos = seek_backwards(string, index + 1, numberCharSet);
+        endPos = seek_forwards(string, index + 1, numberCharSet);
+        
+        return NSMakeRange((NSUInteger)beginPos, (NSUInteger)(endPos - beginPos));
+        
     }
     
     if( beginPos == index && endPos == index ) {
