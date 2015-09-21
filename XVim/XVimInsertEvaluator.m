@@ -203,7 +203,7 @@
 
 - (XVimEvaluator*)eval:(XVimKeyStroke*)keyStroke{
     XVimEvaluator *nextEvaluator = self;
-
+    NSLog(@"@@@ %@", keyStroke);
     SEL keySelector = keyStroke.selector;
     if ([self respondsToSelector:keySelector]) {
 #pragma clang diagnostic push

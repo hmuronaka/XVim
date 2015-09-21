@@ -488,8 +488,8 @@
 - (XVimEvaluator*)DOT{
     [[XVim instance] startRepeat];
     XVimString *repeatRegister = [[XVim instance] lastOperationCommands];
+    NSLog(@"@@@ DOT %@", repeatRegister);
     TRACE_LOG(@"Repeat:%@", repeatRegister);
-    
     NSMutableArray* stack = [[NSMutableArray alloc] init];
     
     if( self.numericMode ){
