@@ -19,6 +19,7 @@
 #import "DVTSourceTextView+XVim.h"
 #import "IDEApplicationController+XVim.h"
 #import "IDEPlaygroundEditor+XVim.h"
+#import "DVTTextCompletionController+XVim.h"
 
 @implementation IDEWorkspaceWindow (XVim)
 
@@ -56,6 +57,7 @@
     [IDEPlaygroundEditor xvim_initialize];
     [IDEEditor xvim_initialize];
     [IDEApplicationController xvim_initialize];
+    [DVTTextCompletionController xvim_initialize];
 }
 
 @end
