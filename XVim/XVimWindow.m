@@ -242,11 +242,11 @@
         [self _resetEvaluatorStack:_currentEvaluatorStack activateNormalHandler:YES];
     }
     [self dumpEvaluatorStack:_currentEvaluatorStack];
+    
     [self clearErrorMessage];
 
     // Record the event
     XVim *xvim = [XVim instance];
-    NSLog(@"@@@ handleKeyStroke %@", keyStroke);
     [xvim appendOperationKeyStroke:[keyStroke xvimString]];
 
     // Evaluate key stroke

@@ -25,7 +25,7 @@
 @class XVimMotion;
 @class XVimRegisterManager;
 @class XVimTester;
-
+@class IDEIndexCompletionItem;
 
 extern NSString * const XVimDocumentChangedNotification;
 extern NSString * const XVimDocumentPathKey;
@@ -89,6 +89,7 @@ extern NSString * const XVimDocumentPathKey;
 - (void)cancelOperationCommands;
 - (void)startRepeat;
 - (void)endRepeat;
+- (void)expandCompletionItem:(IDEIndexCompletionItem*)item;
 
 /**
  * Write string to debuger console.
