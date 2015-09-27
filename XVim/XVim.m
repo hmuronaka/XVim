@@ -341,10 +341,11 @@ NSString * const XVimDocumentPathKey = @"XVimDocumentPathKey";
     if( [[NSCharacterSet whitespaceAndNewlineCharacterSet] characterIsMember:lastChar] ) {
         [self.tempRepeatRegister deleteCharactersInRange:NSMakeRange(self.tempRepeatRegister.length - 1, 1)];
     }
-   
+    
+    NSString* lowercaseTempRepeatRegister = [self.tempRepeatRegister lowercaseString];
     for(NSUInteger i = completionItem.name.length; i > 0; i--) {
-        NSString* itemSubString = [completionItem.name substringToIndex:i];
-        if( [self.tempRepeatRegister hasSuffix:itemSubString] ) {
+        NSString* itemSubString = [[completionItem.name substringToIndex:i] lowercaseString];
+        if( [lowercaseTempRepeatRegister hasSuffix:itemSubString] ) {
             [self.tempRepeatRegister replaceCharactersInRange:NSMakeRange(self.tempRepeatRegister.length - i, itemSubString.length) withString:completionItem.completionText];
             break;
         }
