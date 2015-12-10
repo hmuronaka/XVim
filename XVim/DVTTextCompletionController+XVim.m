@@ -22,6 +22,9 @@
 
 - (BOOL)xvim_acceptCurrentCompletion {
     
+    NSLog(@"@@@@ %@", self.currentSession);
+    NSLog(@"@@@@ %@", self.currentSession.listWindowController);
+    
     if([self.currentSession.listWindowController tryExpandingCompletion]) {
         return YES;
     }

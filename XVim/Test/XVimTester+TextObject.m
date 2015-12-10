@@ -63,11 +63,6 @@
         // (), b
         XVimMakeTestCase(text_object0, 5, 0, @"di(", text_object_i_result0 , 4, 0),
         XVimMakeTestCase(text_object0, 5, 0, @"di)", text_object_i_result0 , 4, 0),
-        XVimMakeTestCase(text_object0, 5, 0, @"da(", text_object_a_result0 , 3, 0),
-        XVimMakeTestCase(text_object0, 5, 0, @"da)", text_object_a_result0 , 3, 0),
-        XVimMakeTestCase(text_object0, 5, 0, @"dib", text_object_i_result0 , 4, 0),
-        XVimMakeTestCase(text_object0, 5, 0, @"dab", text_object_a_result0 , 3, 0),
-            
         XVimMakeTestCase(text_object0, 5, 0, @"yi(0P", text_object_yi_result0 , 2, 0),
         XVimMakeTestCase(text_object0, 5, 0, @"yi)0P", text_object_yi_result0 , 2, 0),
         XVimMakeTestCase(text_object0, 5, 0, @"ya(0P", text_object_ya_result0 , 4, 0),
